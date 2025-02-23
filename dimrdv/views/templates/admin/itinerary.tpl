@@ -1,3 +1,11 @@
+{*
+  This file is part of the dimrdv project.
+  (c) 2025 iepiep <r.minini@solution61.fr>
+  
+  This source file is subject to the MIT license that is bundled
+  with this source code in the file LICENSE.
+*}
+
 {if isset($errors) && $errors|@count > 0}
     <div class="alert alert-danger">
         {foreach from=$errors item=error}
