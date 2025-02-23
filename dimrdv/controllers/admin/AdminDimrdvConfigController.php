@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('_PS_VERSION_')) { exit; }
+
 use PrestaShop\PrestaShop\Core\Search\Filters\ConfigurationFilters;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
