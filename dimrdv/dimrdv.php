@@ -141,14 +141,25 @@ class Dimrdv extends Module {
     public function hookHeader($params) {
     $this->context->controller->registerStylesheet(
         'dimrdv-css',
-        $this->_path . 'views/css/dimrdv.css',
+        $this->_path . 'views/css/front/dimrdv.css',
         ['media' => 'all', 'priority' => 150]
     );
     $this->context->controller->registerJavascript(
         'dimrdv-js',
-        $this->_path . 'views/js/dimrdv.js',
+        $this->_path . 'views/js/front/dimrdv.js',
         ['position' => 'bottom', 'priority' => 150]
     );
 }
+        public function hookdisplayBackOfficeHeader($params) {
+    $this->context->controller->registerStylesheet(
+        'dimrdv-css',
+        $this->_path . 'views/css/back/dimrdv.css',
+        ['media' => 'all', 'priority' => 150]
+    );
+    $this->context->controller->registerJavascript(
+        'dimrdv-js',
+        $this->_path . 'views/js/back/dimrdv.js',
+        ['position' => 'bottom', 'priority' => 150]
+    );
 
 }
