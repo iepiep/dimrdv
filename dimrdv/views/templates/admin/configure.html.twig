@@ -1,0 +1,20 @@
+{% extends '@PrestaShop/Admin/Layout.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ 'Configuration du module'|trans({}, 'Modules.Dimrdv.Admin') }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{{ admin_module_link }}">
+                <div class="form-group">
+                    <label for="api_key">{{ 'Clé API Google Maps'|trans({}, 'Modules.Dimrdv.Admin') }}</label>
+                    <input type="text" id="api_key" name="DIMRDV_GOOGLE_API_KEY" value="{{ google_api_key }}" class="form-control">
+                </div>
+                <button type="submit" name="submit_dimrdv_config" class="btn btn-primary">
+                    {{ 'Enregistrer'|trans({}, 'Modules.Dimrdv.Admin') }}
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

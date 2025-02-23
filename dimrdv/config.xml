@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>dimrdv</name>
+    <displayName><![CDATA[DIM-RDV]]></displayName>
+    <version><![CDATA[1.0.0]]></version>
+    <author><![CDATA[Roberto Minini]]></author>
+    <description><![CDATA[Module de gestion de rendez-vous avec itinéraire optimisé.]]></description>
+    <tab><![CDATA[shipping_logistics]]></tab>
+    <confirmUninstall><![CDATA[Êtes-vous sûr de vouloir désinstaller ce module ?]]></confirmUninstall>
+    <need_instance>0</need_instance>
+    <ps_versions_compliancy>
+        <min>8.2.0</min>
+        <max>8.2.99</max>
+    </ps_versions_compliancy>
+    <controllers>
+        <admin>
+            <controller>AdminDimrdvGestionRdv</controller>
+            <controller>AdminTest</controller> <!-- Ajouter ici le nom du contrôleur de test -->
+        </admin>
+    </controllers>
+</module>
