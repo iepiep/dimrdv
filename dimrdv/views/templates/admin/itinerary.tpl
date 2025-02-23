@@ -20,6 +20,7 @@
 
     <!-- Récapitulatif de l'itinéraire -->
     <h3>{$resumeItineraire|default:"Résumé de l'itinéraire"}</h3>
+
     <ul>
         {foreach from=$itinerary_schedule|default:[] item=appointment}
             <li>
@@ -44,7 +45,7 @@
             // Construction du tableau des adresses depuis optimized_route
             var addresses = [];
             {foreach from=$optimized_route item=stop}
-                addresses.push("{$stop.full_address|escape:'javascript'}");
+                addresses.push("{$stop.full_address|escape:'javascript':'UTF-8'}");
             {/foreach}
 
             if (addresses.length < 2)
@@ -72,7 +73,7 @@
                 if (status == google.maps.DirectionsStatus.OK) {
                     directionsRenderer.setDirections(result);
                 } else {
-                    console.error("{$errorMessage|escape:'javascript'}: " + status);
+                    console.error("{$errorMessage|escape:'javascript':'UTF-8'}: " + status);
                 }
             });
         }
