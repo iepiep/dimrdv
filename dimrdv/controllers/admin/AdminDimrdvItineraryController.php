@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('_PS_VERSION_')) { exit; }
+
 class AdminDimrdvItineraryController extends ModuleAdminController {
 
     public $ssl = true;
