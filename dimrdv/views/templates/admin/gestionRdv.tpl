@@ -1,3 +1,11 @@
+{*
+  This file is part of the dimrdv project.
+  (c) 2025 iepiep <r.minini@solution61.fr>
+  
+  This source file is subject to the MIT license that is bundled
+  with this source code in the file LICENSE.
+*}
+
 <h2>{l s='Gestion des RDV' mod='dimrdv'}</h2>
 
 <form method="post" action="{$link->getAdminLink('AdminDimrdvItinerary')}">
