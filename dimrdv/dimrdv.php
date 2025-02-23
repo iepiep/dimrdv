@@ -139,8 +139,16 @@ class Dimrdv extends Module {
 
     // Ajout de CSS/JS si nécessaire
     public function hookHeader($params) {
-        $this->context->controller->addCSS($this->_path . 'views/css/dimrdv.css');
-        $this->context->controller->addJS($this->_path . 'views/js/dimrdv.js');
-    }
+    $this->context->controller->registerStylesheet(
+        'dimrdv-css',
+        $this->_path . 'views/css/dimrdv.css',
+        ['media' => 'all', 'priority' => 150]
+    );
+    $this->context->controller->registerJavascript(
+        'dimrdv-js',
+        $this->_path . 'views/js/dimrdv.js',
+        ['position' => 'bottom', 'priority' => 150]
+    );
+}
 
 }
