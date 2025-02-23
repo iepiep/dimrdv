@@ -35,7 +35,7 @@ class Dimrdv extends Module {
                 !$this->registerHook('displayHome') ||
                 !$this->registerHook('header') ||
                 !$this->registerHook('displayBackOfficeHeader') ||
-                $this->installTab()
+                !$this->installTabs()
         ) {
             return false;
         }
@@ -114,8 +114,8 @@ class Dimrdv extends Module {
                 !$this->uninstallSql() ||
                 !$this->unregisterHook('displayHome') ||
                 !$this->unregisterHook('header') ||
-                !$this->registerHook('displayBackOfficeHeader') ||
-                $this->uninstallTab()
+                !$this->unregisterHook('displayBackOfficeHeader') ||
+                !$this->uninstallTab()
         ) {
             return false;
         }
@@ -148,27 +148,28 @@ class Dimrdv extends Module {
 
     // Ajout de CSS/JS si nécessaire
     public function hookHeader($params) {
-    $this->context->controller->registerStylesheet(
-        'dimrdv-css',
-        $this->_path . 'views/css/front/dimrdv.css',
-        ['media' => 'all', 'priority' => 150]
-    );
-    $this->context->controller->registerJavascript(
-        'dimrdv-js',
-        $this->_path . 'views/js/front/dimrdv.js',
-        ['position' => 'bottom', 'priority' => 150]
-    );
-}
-        public function hookdisplayBackOfficeHeader($params) {
-    $this->context->controller->registerStylesheet(
-        'dimrdv-css',
-        $this->_path . 'views/css/back/dimrdv.css',
-        ['media' => 'all', 'priority' => 150]
-    );
-    $this->context->controller->registerJavascript(
-        'dimrdv-js',
-        $this->_path . 'views/js/back/dimrdv.js',
-        ['position' => 'bottom', 'priority' => 150]
-    );
+        $this->context->controller->registerStylesheet(
+            'dimrdv-css',
+            $this->_path . 'views/css/front/dimrdv.css',
+            ['media' => 'all', 'priority' => 150]
+        );
+        $this->context->controller->registerJavascript(
+            'dimrdv-js',
+            $this->_path . 'views/js/front/dimrdv.js',
+            ['position' => 'bottom', 'priority' => 150]
+        );
+    }
 
+    public function hookdisplayBackOfficeHeader($params) {
+        $this->context->controller->registerStylesheet(
+            'dimrdv-css',
+            $this->_path . 'views/css/back/dimrdv.css',
+            ['media' => 'all', 'priority' => 150]
+        );
+        $this->context->controller->registerJavascript(
+            'dimrdv-js',
+            $this->_path . 'views/js/back/dimrdv.js',
+            ['position' => 'bottom', 'priority' => 150]
+        );
+    }
 }
