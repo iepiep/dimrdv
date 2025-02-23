@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('_PS_VERSION_')) { exit; }
+
 class DimrdvDimformModuleFrontController extends ModuleFrontController {
 
     public $ssl = true;
