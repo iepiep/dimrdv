@@ -30,6 +30,10 @@ class Dimrdv extends Module {
         parent::__construct();
     }
 
+public function isUsingNewTranslationSystem() {
+    return false;
+}
+    
     public function install() {
         if (!parent::install() ||
                 !$this->installSql() ||
