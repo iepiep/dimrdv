@@ -38,7 +38,7 @@ public function isUsingNewTranslationSystem() {
         if (!parent::install() ||
                 !$this->installSql() ||
                 !$this->registerHook('displayHome') ||
-                !$this->registerHook('header') ||
+                !$this->registerHook('actionFrontControllerSetMedia') ||
                 !$this->registerHook('displayBackOfficeHeader') ||
                 !$this->installTabs()
         ) {
@@ -118,7 +118,7 @@ public function isUsingNewTranslationSystem() {
         if (!parent::uninstall() ||
                 !$this->uninstallSql() ||
                 !$this->unregisterHook('displayHome') ||
-                !$this->unregisterHook('header') ||
+                !$this->unregisterHook('actionFrontControllerSetMedia') ||
                 !$this->unregisterHook('displayBackOfficeHeader') ||
                 !$this->uninstallTab()
         ) {
@@ -152,18 +152,20 @@ public function isUsingNewTranslationSystem() {
     }
 
     // Ajout de CSS/JS si nécessaire
-    public function hookHeader($params) {
-        $this->context->controller->registerStylesheet(
-            'dimrdv-css',
-            $this->_path . 'views/css/front/dimrdv.css',
-            ['media' => 'all', 'priority' => 150]
-        );
-        $this->context->controller->registerJavascript(
-            'dimrdv-js',
-            $this->_path . 'views/js/front/dimrdv.js',
-            ['position' => 'bottom', 'priority' => 150]
-        );
-    }
+public function hookActionFrontControllerSetMedia($params)
+{
+    $this->context->controller->registerStylesheet(
+        'dimrdv-css',
+        $this->_path . 'views/css/front/dimrdv.css',
+        ['media' => 'all', 'priority' => 150]
+    );
+    $this->context->controller->registerJavascript(
+        'dimrdv-js',
+        $this->_path . 'views/js/front/dimrdv.js',
+        ['position' => 'bottom', 'priority' => 150]
+    );
+}
+
 
     public function hookdisplayBackOfficeHeader($params) {
         $this->context->controller->registerStylesheet(
