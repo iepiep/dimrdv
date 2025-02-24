@@ -15,7 +15,11 @@
     <controllers>
         <admin>
             <controller>AdminDimrdvGestionRdv</controller>
-            <controller>AdminTest</controller> <!-- Ajouter ici le nom du contrôleur de test -->
+            <controller>AdminDimrdvConfig</controller>
+            <controller>AdminDimrdvItinerary</controller>
         </admin>
+        <front>
+            <controller>dimform</controller>
+        </front>
     </controllers>
 </module>
