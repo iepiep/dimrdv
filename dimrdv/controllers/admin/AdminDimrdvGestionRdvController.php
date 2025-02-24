@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Roberto Minini <r.minini@solution61.fr>
  * @copyright 2025 Roberto Minini
@@ -40,5 +41,6 @@ class AdminDimrdvGestionRdvController extends ModuleAdminController
         }
 
         $this->setTemplate('module:dimrdv/views/templates/admin/gestionRdv.tpl');
+
     }
 }
