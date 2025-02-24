@@ -40,6 +40,5 @@ class AdminDimrdvGestionRdvController extends ModuleAdminController
         }
 
         $this->setTemplate('module:dimrdv/views/templates/admin/gestionRdv.tpl');
-
     }
 }
