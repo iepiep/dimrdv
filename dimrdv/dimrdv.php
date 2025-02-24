@@ -8,7 +8,6 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -38,12 +37,17 @@ class Dimrdv extends Module
 
     public function install()
     {
-        return parent::install()
-            && $this->installSql()
-            && $this->registerHook('displayHome')
-            && $this->registerHook('actionFrontControllerSetMedia')
-            && $this->registerHook('displayBackOfficeHeader')
-            && $this->installTabs();
+        if (!parent::install()
+            || !$this->installSql()
+            || !$this->registerHook('displayHome')
+            || !$this->registerHook('actionFrontControllerSetMedia')
+            || !$this->registerHook('displayBackOfficeHeader')
+            || !$this->installTabs()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     private function installTabs()
@@ -85,6 +89,7 @@ class Dimrdv extends Module
                 $tab->delete();
             }
         }
+
         return true;
     }
 
@@ -94,37 +99,47 @@ class Dimrdv extends Module
         if (!file_exists($sql_file)) {
             return false;
         }
-        
-        $sql_content = str_replace('PREFIX_', _DB_PREFIX_, file_get_contents($sql_file));
-        
+
+        $sql_content = file_get_contents($sql_file);
+        $sql_content = str_replace('PREFIX_', _DB_PREFIX_, $sql_content);
         $queries = preg_split("/;\s*[\r\n]+/", $sql_content);
-        
+
         foreach ($queries as $query) {
-            if (!empty(trim($query)) && Db::getInstance()->execute($query) == false) {
-                return false;
+            if (!empty(trim($query))) {
+                if (!Db::getInstance()->execute($query)) {
+                    return false;
+                }
             }
         }
+
         return true;
     }
 
     private function uninstallSql()
     {
-        return Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'dim_rdv`');
+        $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'dim_rdv`';
+        return Db::getInstance()->execute($sql);
     }
 
     public function uninstall()
     {
-        return parent::uninstall()
-            && $this->uninstallSql()
-            && $this->unregisterHook('displayHome')
-            && $this->unregisterHook('actionFrontControllerSetMedia')
-            && $this->unregisterHook('displayBackOfficeHeader')
-            && $this->uninstallTab();
+        if (!parent::uninstall()
+            || !$this->uninstallSql()
+            || !$this->unregisterHook('displayHome')
+            || !$this->unregisterHook('actionFrontControllerSetMedia')
+            || !$this->unregisterHook('displayBackOfficeHeader')
+            || !$this->uninstallTab()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     public function resetModuleData()
     {
-        return Db::getInstance()->execute('TRUNCATE TABLE `' . _DB_PREFIX_ . 'dim_rdv`');
+        $sql = 'TRUNCATE TABLE `' . _DB_PREFIX_ . 'dim_rdv`';
+        return Db::getInstance()->execute($sql);
     }
 
     public function getContent()
@@ -132,6 +147,7 @@ class Dimrdv extends Module
         if (Tab::getIdFromClassName('AdminDimrdvConfig')) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminDimrdvConfig'));
         }
+
         return $this->displayError($this->l('Erreur : L’onglet de configuration n’est pas installé.'));
     }
 
@@ -141,6 +157,7 @@ class Dimrdv extends Module
             'dimrdv_link' => $this->context->link->getModuleLink($this->name, 'dimform', [], true),
             'module' => $this,
         ]);
+
         return $this->display(__FILE__, 'views/templates/hook/displayHome.tpl');
     }
 
@@ -151,7 +168,6 @@ class Dimrdv extends Module
             $this->_path . 'views/css/front/dimrdv.css',
             ['media' => 'all', 'priority' => 150]
         );
-        
         $this->context->controller->registerJavascript(
             'dimrdv-js',
             $this->_path . 'views/js/front/dimrdv.js',
@@ -166,7 +182,6 @@ class Dimrdv extends Module
             $this->_path . 'views/css/back/dimrdv.css',
             ['media' => 'all', 'priority' => 150]
         );
-        
         $this->context->controller->registerJavascript(
             'dimrdv-js',
             $this->_path . 'views/js/back/dimrdv.js',
