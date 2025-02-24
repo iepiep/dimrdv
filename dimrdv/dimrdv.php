@@ -96,6 +96,7 @@ class Dimrdv extends Module
         }
         
         $sql_content = str_replace('PREFIX_', _DB_PREFIX_, file_get_contents($sql_file));
+        
         $queries = preg_split("/;\s*[\r\n]+/", $sql_content);
         
         foreach ($queries as $query) {
