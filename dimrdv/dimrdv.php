@@ -22,6 +22,7 @@ class Dimrdv extends Module {
         $this->author = 'Roberto Minini';
         $this->need_instance = 0;
         $this->bootstrap = true;
+        $this->controllers = array('dimform');
         $this->displayName = $this->l('DIM-RDV');
         $this->description = $this->l('Appointment management module with optimized itinerary.');
         $this->ps_versions_compliancy = array('min' => '8.2.0', 'max' => _PS_VERSION_);
