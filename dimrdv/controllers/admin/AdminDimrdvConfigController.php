@@ -8,17 +8,17 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-if (!defined('_PS_VERSION_')) { exit; }
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-use PrestaShop\PrestaShop\Core\Search\Filters\ConfigurationFilters;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
-class AdminDimrdvConfigController extends FrameworkBundleAdminController
-{
-    public function indexAction()
-    {
+class AdminDimrdvConfigController extends FrameworkBundleAdminController {
+
+    public function indexAction() {
         return $this->render('@Modules/dimrdv/views/templates/admin/configure.html.twig', [
-            'module_link' => $this->generateUrl('admin_dimrdv_config'),
+                    'module_link' => $this->generateUrl('admin_dimrdv_config'),
         ]);
     }
 }
