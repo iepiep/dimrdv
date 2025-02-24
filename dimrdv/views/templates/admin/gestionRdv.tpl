@@ -30,12 +30,12 @@
                 {foreach from=$rdvs item=row}
                     <tr>
                         <td>{$row.id_dim_rdv}</td>
-                        <td>{$row.lastname|escape:'html'}</td>
-                        <td>{$row.firstname|escape:'html'}</td>
-                        <td>{$row.address|escape:'html'}</td>
-                        <td>{$row.city|escape:'html'}</td>
-                        <td>{$row.phone|escape:'html'}</td>
-                        <td>{$row.email|escape:'html'}</td>
+                        <td>{$row.lastname|escape:'html':'UTF-8'}</td>
+                        <td>{$row.firstname|escape:'html':'UTF-8'}</td>
+                        <td>{$row.address|escape:'html':'UTF-8'}</td>
+                        <td>{$row.city|escape:'html':'UTF-8'}</td>
+                        <td>{$row.phone|escape:'html':'UTF-8'}</td>
+                        <td>{$row.email|escape:'html':'UTF-8'}</td>
                         <td>
                             <input type="checkbox" name="selected[]" value="{$row.id_dim_rdv}" />
                         </td>
