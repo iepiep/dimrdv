@@ -16,13 +16,13 @@
         {/foreach}
     </div>
 {else}
-    <h2>{$itinOptimise|default:"Itinéraire optimisé"}</h2>
+    <h2>{$itinOptimise|default:"Itinéraire optimisé"|escape:'html':'UTF-8'}</h2>
 
     <!-- Carte Google Maps -->
     <div id="map" style="width: 100%; height: 400px;"></div>
 
     <!-- Récapitulatif de l'itinéraire -->
-    <h3>{$resumeItineraire|default:"Résumé de l'itinéraire"}</h3>
+    <h3>{$resumeItineraire|default:"Résumé de l'itinéraire"|escape:'html':'UTF-8'}</h3>
 
     <ul>
         {foreach from=$itinerary_schedule|default:[] item=appointment}
@@ -48,7 +48,7 @@
             // Construction du tableau des adresses depuis optimized_route
             var addresses = [];
             {foreach from=$optimized_route item=stop}
-                addresses.push("{$stop.full_address|escape:'javascript'}");
+                addresses.push("{$stop.full_address|escape:'javascript':'UTF-8'}");
             {/foreach}
 
             if (addresses.length < 2)
@@ -76,7 +76,7 @@
                 if (status == google.maps.DirectionsStatus.OK) {
                     directionsRenderer.setDirections(result);
                 } else {
-                    console.error("{$errorMessage|escape:'javascript'}: " + status);
+                    console.error("{$errorMessage|escape:'javascript':'UTF-8'}: " + status);
                 }
             });
         }
