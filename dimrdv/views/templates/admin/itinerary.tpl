@@ -12,7 +12,7 @@
 {if isset($errors) && $errors|@count > 0}
     <div class="alert alert-danger">
         {foreach from=$errors item=error}
-            <p>{$error}</p>
+            <p>{$error|escape:'html':'UTF-8'}</p>
         {/foreach}
     </div>
 {else}
@@ -27,13 +27,13 @@
     <ul>
         {foreach from=$itinerary_schedule|default:[] item=appointment}
             <li>
-                {$appointment.time} - {$appointment.firstname} {$appointment.lastname} - {$appointment.address}
+                {$appointment.time|escape:'html':'UTF-8'} - {$appointment.firstname|escape:'html':'UTF-8'} {$appointment.lastname|escape:'html':'UTF-8'} - {$appointment.address|escape:'html':'UTF-8'}
             </li>
         {/foreach}
     </ul>
 
     <!-- Inclusion de l'API Google Maps et affichage de l'itinéraire -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={$google_maps_api_key}&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={$google_maps_api_key|escape:'html':'UTF-8'}&callback=initMap" async defer></script>
     <script>
         function initMap() {
             var directionsService = new google.maps.DirectionsService();
