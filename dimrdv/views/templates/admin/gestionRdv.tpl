@@ -11,7 +11,7 @@
 
 <h2>{l s='Gestion des RDV' mod='dimrdv'}</h2>
 
-<form method="post" action="{$link->getAdminLink('AdminDimrdvItinerary')}">
+<form method="post" action="{$link->getAdminLink('AdminDimrdvItinerary')|escape:'html':'UTF-8'}">
     <table class="table">
         <thead>
             <tr>
@@ -29,7 +29,7 @@
             {if $rdvs}
                 {foreach from=$rdvs item=row}
                     <tr>
-                        <td>{$row.id_dim_rdv}</td>
+                        <td>{$row.id_dim_rdv|escape:'html':'UTF-8'}</td>
                         <td>{$row.lastname|escape:'html':'UTF-8'}</td>
                         <td>{$row.firstname|escape:'html':'UTF-8'}</td>
                         <td>{$row.address|escape:'html':'UTF-8'}</td>
@@ -37,7 +37,7 @@
                         <td>{$row.phone|escape:'html':'UTF-8'}</td>
                         <td>{$row.email|escape:'html':'UTF-8'}</td>
                         <td>
-                            <input type="checkbox" name="selected[]" value="{$row.id_dim_rdv}" />
+                            <input type="checkbox" name="selected[]" value="{$row.id_dim_rdv|escape:'html':'UTF-8'}" />
                         </td>
                     </tr>
                 {/foreach}
