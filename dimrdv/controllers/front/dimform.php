@@ -30,6 +30,7 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController
             'gdpr_link' => $this->context->link->getPageLink('gdpr'),
             'date_options' => $this->getDateOptions(),
         ]);
+
         $this->setTemplate('module:dimrdv/views/templates/front/dimrdv.tpl');
     }
 
@@ -49,15 +50,17 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController
         // Validation des champs obligatoires et du consentement RGPD
         if (empty($lastname) || empty($firstname) || empty($address) || empty($postal_code) || empty($city) || empty($phone) || empty($email) || empty($date_creneau1) || empty($date_creneau2) || !$gdpr_consent) {
             $this->errors[] = $this->module->l('Tous les champs sont obligatoires et le consentement RGPD doit être accepté.');
+
             return;
         }
 
         if (!Validate::isEmail($email)) {
             $this->errors[] = $this->module->l('Email invalide.');
+
             return;
         }
 
-        $data = array(
+        $data = [
             'lastname' => pSQL($lastname),
             'firstname' => pSQL($firstname),
             'address' => pSQL($address),
@@ -69,7 +72,7 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController
             'date_creneau2' => pSQL($date_creneau2),
             'visited' => 0,
             'created_at' => date('Y-m-d H:i:s'),
-        );
+        ];
 
         if (Db::getInstance()->insert('dim_rdv', $data)) {
             Tools::redirect($this->context->link->getPageLink('index', true, null, 'conf=1'));
@@ -81,20 +84,21 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController
     // Génère les options de créneaux pour les deux semaines à venir (hors week-end)
     protected function getDateOptions()
     {
-        $options = array();
+        $options = [];
         $start = new DateTime();
         $end = (new DateTime())->modify('+14 days');
 
         while ($start <= $end) {
             // Exclure samedi (6) et dimanche (7)
-            if (!in_array($start->format('N'), array(6, 7))) {
+            if (!in_array($start->format('N'), [6, 7])) {
                 $dateStr = $start->format('l d/m/y');
-                $options[] = array('value' => $dateStr . ' MATIN', 'label' => $dateStr . ' MATIN');
-                $options[] = array('value' => $dateStr . ' APRES-MIDI', 'label' => $dateStr . ' APRES-MIDI');
+                $options[] = ['value' => $dateStr . ' MATIN', 'label' => $dateStr . ' MATIN'];
+                $options[] = ['value' => $dateStr . ' APRES-MIDI', 'label' => $dateStr . ' APRES-MIDI'];
             }
+
             $start->modify('+1 day');
         }
+
         return $options;
     }
-
 }
