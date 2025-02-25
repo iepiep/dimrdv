@@ -8,13 +8,16 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-if (!defined('_PS_VERSION_')) { exit; }
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-class DimrdvDimformModuleFrontController extends ModuleFrontController {
-
+class DimrdvDimformModuleFrontController extends ModuleFrontController
+{
     public $ssl = true;
 
-    public function initContent() {
+    public function initContent()
+    {
         parent::initContent();
 
         if (Tools::isSubmit('submit_dimrdv')) {
@@ -30,7 +33,8 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController {
         $this->setTemplate('module:dimrdv/views/templates/front/dimrdv.tpl');
     }
 
-    protected function processForm() {
+    protected function processForm()
+    {
         $lastname = Tools::getValue('lastname');
         $firstname = Tools::getValue('firstname');
         $address = Tools::getValue('address');
@@ -75,7 +79,8 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController {
     }
 
     // Génère les options de créneaux pour les deux semaines à venir (hors week-end)
-    protected function getDateOptions() {
+    protected function getDateOptions()
+    {
         $options = array();
         $start = new DateTime();
         $end = (new DateTime())->modify('+14 days');
