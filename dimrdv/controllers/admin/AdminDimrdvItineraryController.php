@@ -73,12 +73,7 @@ class AdminDimrdvItineraryController extends ModuleAdminController
         $this->setTemplate('module:dimrdv/views/templates/front/itinerary.tpl');
     }
 
-    /**
-     * Calcule l'itinéraire optimisé et stocke la matrice des durées.
-     *
-     * @param array $selectedIds
-     * @return array Tableau ordonné des arrêts (chaque arrêt est un tableau associatif).
-     */
+    // Calcule l'itinéraire optimisé et stocke la matrice des durées
     private function calculateOptimizedRoute($selectedIds)
     {
         $baseLocation = '25 rue de la Noé Pierre, 53960 Bonchamp-lès-Laval, France';
@@ -183,12 +178,7 @@ class AdminDimrdvItineraryController extends ModuleAdminController
         return $orderedRoute;
     }
 
-    /**
-     * Algorithme TSP : plus proche voisin puis optimisation 2‑opt.
-     *
-     * @param array $distanceMatrix
-     * @return array Ordre optimal des indices.
-     */
+    // Algorithme TSP plus proche voisin
     private function solveTSP($distanceMatrix)
     {
         $numLocations = count($distanceMatrix);
@@ -214,6 +204,7 @@ class AdminDimrdvItineraryController extends ModuleAdminController
         return $this->optimizeRoute2Opt($route, $distanceMatrix);
     }
 
+    // optimisation 2‑opt
     private function optimizeRoute2Opt($route, $distanceMatrix)
     {
         $improved = true;
@@ -252,15 +243,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController
         return $totalDistance;
     }
 
-    /**
-     * Planifie les horaires en utilisant les temps réels de déplacement.
-     * Pour chaque trajet, le temps de déplacement (en secondes) est récupéré depuis la matrice des durées,
-     * puis ajouté au temps courant. On ajoute également une durée d'intervention de 2 heures et,
-     * si nécessaire, une pause déjeuner d'1h.
-     *
-     * @param array $orderedRoute Tableau ordonné des arrêts (déjà construit dans calculateOptimizedRoute)
-     * @return array Synthèse de l’itinéraire avec horaires et informations clients.
-     */
+    // Planifie les horaires temps réels de déplacement
+    // durée d'intervention de 2 heures 1h
     private function scheduleItinerary($orderedRoute)
     {
         // Récupérer les indices optimisés calculés précédemment
