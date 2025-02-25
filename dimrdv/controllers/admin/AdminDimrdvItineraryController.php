@@ -11,19 +11,21 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class AdminDimrdvItineraryController extends ModuleAdminController {
-
+class AdminDimrdvItineraryController extends ModuleAdminController
+{
     public $ssl = true;
     // Propriétés pour stocker la matrice des durées et les indices optimisés
     private $durationMatrix = [];
     private $optimizedRouteIndices = [];
 
-    private function getGoogleApiKey() {
+    private function getGoogleApiKey()
+    {
         $apiKey = Configuration::get('DIMRDV_GOOGLE_API_KEY');
         return !empty($apiKey) ? $apiKey : '';
     }
 
-    public function initContent() {
+    public function initContent()
+    {
         parent::initContent();
 
         // Assignation des variables de traduction
@@ -77,7 +79,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController {
      * @param array $selectedIds
      * @return array Tableau ordonné des arrêts (chaque arrêt est un tableau associatif).
      */
-    private function calculateOptimizedRoute($selectedIds) {
+    private function calculateOptimizedRoute($selectedIds)
+    {
         $baseLocation = '25 rue de la Noé Pierre, 53960 Bonchamp-lès-Laval, France';
 
         // Récupération des données des clients depuis la table dim_rdv
@@ -186,7 +189,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController {
      * @param array $distanceMatrix
      * @return array Ordre optimal des indices.
      */
-    private function solveTSP($distanceMatrix) {
+    private function solveTSP($distanceMatrix)
+    {
         $numLocations = count($distanceMatrix);
         $unvisited = range(1, $numLocations - 1); // Exclut le point de départ
         $route = [0]; // Commence à la base
@@ -210,7 +214,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController {
         return $this->optimizeRoute2Opt($route, $distanceMatrix);
     }
 
-    private function optimizeRoute2Opt($route, $distanceMatrix) {
+    private function optimizeRoute2Opt($route, $distanceMatrix)
+    {
         $improved = true;
         $numLocations = count($route);
 
@@ -229,15 +234,17 @@ class AdminDimrdvItineraryController extends ModuleAdminController {
         return $route;
     }
 
-    private function swapTwoOpt($route, $i, $j) {
+    private function swapTwoOpt($route, $i, $j)
+    {
         return array_merge(
-                array_slice($route, 0, $i),
-                array_reverse(array_slice($route, $i, $j - $i + 1)),
-                array_slice($route, $j + 1)
+            array_slice($route, 0, $i),
+            array_reverse(array_slice($route, $i, $j - $i + 1)),
+            array_slice($route, $j + 1)
         );
     }
 
-    private function calculateTotalDistance($route, $distanceMatrix) {
+    private function calculateTotalDistance($route, $distanceMatrix)
+    {
         $totalDistance = 0;
         for ($i = 0; $i < count($route) - 1; $i++) {
             $totalDistance += $distanceMatrix[$route[$i]][$route[$i + 1]];
@@ -254,7 +261,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController {
      * @param array $orderedRoute Tableau ordonné des arrêts (déjà construit dans calculateOptimizedRoute)
      * @return array Synthèse de l’itinéraire avec horaires et informations clients.
      */
-    private function scheduleItinerary($orderedRoute) {
+    private function scheduleItinerary($orderedRoute)
+    {
         // Récupérer les indices optimisés calculés précédemment
         $routeIndices = $this->optimizedRouteIndices;
         $currentTime = new DateTime('08:30');
