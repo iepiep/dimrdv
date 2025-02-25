@@ -44,7 +44,6 @@ class AdminDimrdvItineraryController extends ModuleAdminController
             return;
         }
 
-
         // Calcul de l'itinéraire optimisé
         $orderedRoute = $this->calculateOptimizedRoute($selected);
         if (empty($orderedRoute)) {
@@ -212,8 +211,8 @@ class AdminDimrdvItineraryController extends ModuleAdminController
 
         while ($improved) {
             $improved = false;
-            for ($i = 1; $i < $numLocations - 2; $i++) {
-                for ($j = $i + 1; $j < $numLocations - 1; $j++) {
+            for ($i = 1; $i < $numLocations - 2; ++$i) {
+                for ($j = $i + 1; $j < $numLocations - 1; ++$j) {
                     $newRoute = $this->swapTwoOpt($route, $i, $j);
                     if ($this->calculateTotalDistance($newRoute, $distanceMatrix) < $this->calculateTotalDistance($route, $distanceMatrix)) {
                         $route = $newRoute;
@@ -237,7 +236,7 @@ class AdminDimrdvItineraryController extends ModuleAdminController
     private function calculateTotalDistance($route, $distanceMatrix)
     {
         $totalDistance = 0;
-        for ($i = 0; $i < count($route) - 1; $i++) {
+        for ($i = 0; $i < count($route) - 1; ++$i) {
             $totalDistance += $distanceMatrix[$route[$i]][$route[$i + 1]];
         }
         return $totalDistance;
@@ -255,7 +254,7 @@ class AdminDimrdvItineraryController extends ModuleAdminController
         $numLegs = count($routeIndices);
 
         // On planifie pour chaque RDV (les indices 1 à numLegs-2 correspondent aux RDVs, en excluant le départ (0) et le retour)
-        for ($i = 1; $i < $numLegs - 1; $i++) {
+        for ($i = 1; $i < $numLegs - 1; ++$i) {
             // Calcul du temps de déplacement entre l'arrêt précédent et l'arrêt courant
             $prevIndex = $routeIndices[$i - 1];
             $currIndex = $routeIndices[$i];
