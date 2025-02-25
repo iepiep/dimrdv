@@ -41,7 +41,7 @@ class Dimrdv extends Module
             || !$this->installSql()
             || !$this->registerHook('displayHome')
             || !$this->registerHook('actionFrontControllerSetMedia')
-            || !$this->registerHook('displayBackOfficeHeader')
+            || !$this->registerHook('hookActionAdminControllerSetMedia)
             || !$this->installTabs()
         ) {
             return false;
@@ -127,7 +127,7 @@ class Dimrdv extends Module
             || !$this->uninstallSql()
             || !$this->unregisterHook('displayHome')
             || !$this->unregisterHook('actionFrontControllerSetMedia')
-            || !$this->unregisterHook('displayBackOfficeHeader')
+            || !$this->unregisterHook('hookActionAdminControllerSetMedia')
             || !$this->uninstallTab()
         ) {
             return false;
@@ -163,29 +163,14 @@ class Dimrdv extends Module
 
     public function hookActionFrontControllerSetMedia($params)
     {
-        $this->context->controller->registerStylesheet(
-            'dimrdv-css',
-            $this->_path . 'views/css/front/dimrdv.css',
-            ['media' => 'all', 'priority' => 150]
-        );
-        $this->context->controller->registerJavascript(
-            'dimrdv-js',
-            $this->_path . 'views/js/front/dimrdv.js',
-            ['position' => 'bottom', 'priority' => 150]
-        );
+        $this->context->controller->addCSS($this->_path . 'views/css/front/dimrdv.css', 'all');
+        $this->context->controller->addJS($this->_path . 'views/js/front/dimrdv.js');
+    }
+    
+    public function hookActionAdminControllerSetMedia($params)
+    {
+        $this->context->controller->addCSS($this->_path . 'views/css/back/dimrdv.css', 'all');
+        $this->context->controller->addJS($this->_path . 'views/js/back/dimrdv.js');
     }
 
-    public function hookDisplayBackOfficeHeader($params)
-    {
-        $this->context->controller->registerStylesheet(
-            'dimrdv-css',
-            $this->_path . 'views/css/back/dimrdv.css',
-            ['media' => 'all', 'priority' => 150]
-        );
-        $this->context->controller->registerJavascript(
-            'dimrdv-js',
-            $this->_path . 'views/js/back/dimrdv.js',
-            ['position' => 'bottom', 'priority' => 150]
-        );
-    }
 }
