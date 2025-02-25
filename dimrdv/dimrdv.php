@@ -12,6 +12,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Translation\TranslatorInterface;
+
 class Dimrdv extends Module
 {
     public function __construct()
@@ -22,7 +25,7 @@ class Dimrdv extends Module
         $this->author = 'Roberto Minini';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->controllers = ['dimform'];
+        // $this->controllers = ['dimform']; // Remove this line
         $this->displayName = $this->l('DIM-RDV');
         $this->description = $this->l('Appointment management module with optimized itinerary.');
         $this->ps_versions_compliancy = ['min' => '8.2.0', 'max' => _PS_VERSION_];
@@ -30,18 +33,18 @@ class Dimrdv extends Module
         parent::__construct();
     }
 
-    public function isUsingNewTranslationSystem()
+    public function isUsingNewTranslationSystem(): bool
     {
-        return false;
+        return true;
     }
 
-    public function install()
+    public function install(): bool
     {
         if (!parent::install()
             || !$this->installSql()
             || !$this->registerHook('displayHome')
             || !$this->registerHook('actionFrontControllerSetMedia')
-            || !$this->registerHook('hookActionAdminControllerSetMedia)
+            || !$this->registerHook('actionAdminControllerSetMedia')
             || !$this->installTabs()
         ) {
             return false;
@@ -50,7 +53,7 @@ class Dimrdv extends Module
         return true;
     }
 
-    private function installTabs()
+    private function installTabs(): bool
     {
         $parentTab = new Tab();
         $parentTab->active = 1;
@@ -59,41 +62,30 @@ class Dimrdv extends Module
         $parentTab->module = $this->name;
         $parentTab->icon = 'directions';
 
-        foreach (Language::getLanguages(true) as $lang) {
-            $parentTab->name[$lang['id_lang']] = 'DIM RDV';
+        $languages = Language::getLanguages(true);
+        foreach ($languages as $lang) {
+            $parentTab->name[$lang['id_lang']] = $this->l('DIM RDV', $lang['locale']);
         }
-        $parentTab->add();
-
-        $configTab = new Tab();
-        $configTab->active = 1;
-        $configTab->class_name = 'AdminDimrdvConfig';
-        $configTab->id_parent = (int) Tab::getIdFromClassName('AdminDimrdvGestionRdv');
-        $configTab->module = $this->name;
-        $configTab->icon = 'settings';
-
-        foreach (Language::getLanguages(true) as $lang) {
-            $configTab->name[$lang['id_lang']] = 'Config';
-        }
-        $configTab->add();
-
-        return true;
+        return $parentTab->add();
     }
 
-    public function uninstallTab()
+    public function uninstallTab(): bool
     {
-        $tabs = ['AdminDimrdvGestionRdv', 'AdminDimrdvConfig'];
+        $tabs = ['AdminDimrdvGestionRdv', 'AdminDimrdvConfig', 'AdminDimrdvItinerary'];
         foreach ($tabs as $tabClass) {
             $id_tab = (int) Tab::getIdFromClassName($tabClass);
             if ($id_tab) {
                 $tab = new Tab($id_tab);
-                $tab->delete();
+                if (!$tab->delete()) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
 
-    private function installSql()
+    private function installSql(): bool
     {
         $sql_file = dirname(__FILE__) . '/sql/installs.sql';
         if (!file_exists($sql_file)) {
@@ -106,28 +98,39 @@ class Dimrdv extends Module
 
         foreach ($queries as $query) {
             if (!empty(trim($query))) {
-                if (!Db::getInstance()->execute($query)) {
+                try {
+                    if (!Db::getInstance()->execute($query)) {
+                        return false;
+                    }
+                } catch (Exception $e) {
+                    PrestaShopLogger::addLog("SQL Error: " . $e->getMessage(), 3);
                     return false;
                 }
+
             }
         }
 
         return true;
     }
 
-    private function uninstallSql()
+    private function uninstallSql(): bool
     {
         $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'dim_rdv`';
-        return Db::getInstance()->execute($sql);
+        try {
+            return Db::getInstance()->execute($sql);
+        } catch (Exception $e) {
+            PrestaShopLogger::addLog("SQL Uninstall Error: " . $e->getMessage(), 3);
+            return false;
+        }
     }
 
-    public function uninstall()
+    public function uninstall(): bool
     {
         if (!parent::uninstall()
             || !$this->uninstallSql()
             || !$this->unregisterHook('displayHome')
             || !$this->unregisterHook('actionFrontControllerSetMedia')
-            || !$this->unregisterHook('hookActionAdminControllerSetMedia')
+            || !$this->unregisterHook('actionAdminControllerSetMedia')
             || !$this->uninstallTab()
         ) {
             return false;
@@ -136,41 +139,48 @@ class Dimrdv extends Module
         return true;
     }
 
-    public function resetModuleData()
+    public function resetModuleData(): bool
     {
         $sql = 'TRUNCATE TABLE `' . _DB_PREFIX_ . 'dim_rdv`';
-        return Db::getInstance()->execute($sql);
-    }
-
-    public function getContent()
-    {
-        if (Tab::getIdFromClassName('AdminDimrdvConfig')) {
-            Tools::redirectAdmin($this->context->link->getAdminLink('AdminDimrdvConfig'));
+        try {
+            return Db::getInstance()->execute($sql);
+        } catch (Exception $e) {
+            PrestaShopLogger::addLog("SQL Reset Error: " . $e->getMessage(), 3);
+            return false;
         }
-
-        return $this->displayError($this->l('Erreur : L’onglet de configuration n’est pas installé.'));
     }
 
-    public function hookDisplayHome($params)
+    public function getContent(): string
+    {
+        $url = $this->context->link->getAdminLink('AdminDimrdvConfig');
+        Tools::redirectAdmin($url);
+        return '';
+    }
+
+    public function hookDisplayHome(array $params): string
     {
         $this->context->smarty->assign([
-            'dimrdv_link' => $this->context->link->getModuleLink($this->name, 'dimform', [], true),
+            'dimrdv_link' => $this->context->link->getModuleLink($this->name, 'dimform'),
             'module' => $this,
         ]);
 
         return $this->display(__FILE__, 'views/templates/hook/displayHome.tpl');
     }
 
-    public function hookActionFrontControllerSetMedia($params)
+    public function hookActionFrontControllerSetMedia(array $params): void
     {
         $this->context->controller->addCSS($this->_path . 'views/css/front/dimrdv.css', 'all');
         $this->context->controller->addJS($this->_path . 'views/js/front/dimrdv.js');
     }
-    
-    public function hookActionAdminControllerSetMedia($params)
+
+    public function hookActionAdminControllerSetMedia(array $params): void
     {
         $this->context->controller->addCSS($this->_path . 'views/css/back/dimrdv.css', 'all');
         $this->context->controller->addJS($this->_path . 'views/js/back/dimrdv.js');
     }
 
+    public function getPathUri(): string
+    {
+        return $this->_path;
+    }
 }
