@@ -45,7 +45,7 @@ class Dimrdv extends Module {
     }
 
     public function install(): bool {
-        if (!parent::install() || !$this->installSql() || !$this->registerHook('displayHome') || !$this->registerHook('actionFrontControllerSetMedia') || !$this->registerHook('actionAdminControllerSetMedia') || !$this->installTabs()
+        if (!parent::install() || !$this->installSql() || !$this->registerHook('displayHome') || !$this->registerHook('actionFrontControllerSetMedia') || !$this->installTabs()
         ) {
             return false;
         }
@@ -163,7 +163,7 @@ class Dimrdv extends Module {
     }
 
     public function uninstall(): bool {
-        if (!parent::uninstall() || !$this->uninstallSql() || !$this->unregisterHook('displayHome') || !$this->unregisterHook('actionFrontControllerSetMedia') || !$this->unregisterHook('actionAdminControllerSetMedia') || !$this->uninstallTab()
+        if (!parent::uninstall() || !$this->uninstallSql() || !$this->unregisterHook('displayHome') || !$this->unregisterHook('actionFrontControllerSetMedia') || !$this->uninstallTab()
         ) {
             return false;
         }
