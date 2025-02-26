@@ -14,5 +14,4 @@
     </ps_versions_compliancy>
     <config_file>config/services.xml</config_file>
     <config_file>config/hook.xml</config_file>
-    <config_file>config/routes.xml</config_file>
 </module>
