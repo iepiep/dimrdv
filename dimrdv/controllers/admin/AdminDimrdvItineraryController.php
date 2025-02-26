@@ -11,14 +11,14 @@
 
 namespace Iepiep\Dimrdv\Controller\Admin;
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
+use Iepiep\Dimrdv\Service\ItineraryService;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Iepiep\Dimrdv\Service\ItineraryService; // Assuming you create this service
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class AdminDimrdvItineraryController extends FrameworkBundleAdminController
 {
@@ -37,6 +37,7 @@ class AdminDimrdvItineraryController extends FrameworkBundleAdminController
 
         if (empty($selectedIds) || !is_array($selectedIds)) {
             $this->addFlash('error', $this->trans('No appointments selected.', 'Modules.Dimrdv.Admin'));
+
             return $this->redirectToRoute('admin_dimrdv_gestionrdv_index'); // Redirect back to the RDV list
         }
 
@@ -44,6 +45,7 @@ class AdminDimrdvItineraryController extends FrameworkBundleAdminController
             $itineraryData = $this->itineraryService->calculateItinerary($selectedIds, $this->googleApiKey);
         } catch (\Exception $e) {
             $this->addFlash('error', $this->trans('Error calculating itinerary: %error%', ['%error%' => $e->getMessage()], 'Modules.Dimrdv.Admin'));
+
             return $this->redirectToRoute('admin_dimrdv_gestionrdv_index');
         }
 
