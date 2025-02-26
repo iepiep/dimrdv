@@ -1,22 +1,15 @@
 <?php
-/**
- * @author Roberto Minini <r.minini@solution61.fr>
- * @copyright 2025 Roberto Minini
- * @license MIT
- *
- * This file is part of the dimrdv project.
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Translation\TranslatorInterface;
+use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
 
 class Dimrdv extends Module
 {
+    private $templateFile;
+
     public function __construct()
     {
         $this->name = 'dimrdv';
@@ -25,12 +18,13 @@ class Dimrdv extends Module
         $this->author = 'Roberto Minini';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        // $this->controllers = ['dimform']; // Remove this line
         $this->displayName = $this->l('DIM-RDV');
         $this->description = $this->l('Appointment management module with optimized itinerary.');
         $this->ps_versions_compliancy = ['min' => '8.2.0', 'max' => _PS_VERSION_];
 
         parent::__construct();
+
+        $this->templateFile = 'module:' . $this->name . '/views/templates/hook/displayHome.tpl';
     }
 
     public function isUsingNewTranslationSystem(): bool
@@ -66,19 +60,52 @@ class Dimrdv extends Module
         foreach ($languages as $lang) {
             $parentTab->name[$lang['id_lang']] = $this->l('DIM RDV', $lang['locale']);
         }
-        return $parentTab->add();
+
+        if (!$parentTab->add()) {
+            return false;
+        }
+
+        // Save the parent tab ID to configuration
+        Configuration::updateValue('DIMRDV_PARENT_TAB_ID', (int)$parentTab->id);
+
+        // Create subtab for configuration
+        $configTab = new Tab();
+        $configTab->active = 1;
+        $configTab->class_name = 'AdminDimrdvConfig';
+        $configTab->id_parent = (int)$parentTab->id; // Parent is the main module tab
+        $configTab->module = $this->name;
+        foreach ($languages as $lang) {
+            $configTab->name[$lang['id_lang']] = $this->l('Configuration', $lang['locale']); // Translation key
+        }
+        if (!$configTab->add()) {
+            return false;
+        }
+
+        // Create subtab for itinerary
+        $itineraryTab = new Tab();
+        $itineraryTab->active = 1;
+        $itineraryTab->class_name = 'AdminDimrdvItinerary';
+        $itineraryTab->id_parent = (int)$parentTab->id; // Parent is the main module tab
+        $itineraryTab->module = $this->name;
+        foreach ($languages as $lang) {
+            $itineraryTab->name[$lang['id_lang']] = $this->l('Itinerary', $lang['locale']); // Translation key
+        }
+        if (!$itineraryTab->add()) {
+            return false;
+        }
+
+        return true;
     }
 
     public function uninstallTab(): bool
     {
-        $tabs = ['AdminDimrdvGestionRdv', 'AdminDimrdvConfig', 'AdminDimrdvItinerary'];
-        foreach ($tabs as $tabClass) {
-            $id_tab = (int) Tab::getIdFromClassName($tabClass);
-            if ($id_tab) {
-                $tab = new Tab($id_tab);
-                if (!$tab->delete()) {
-                    return false;
-                }
+        // Retrieve the parent tab ID from configuration
+        $parentTabId = Configuration::get('DIMRDV_PARENT_TAB_ID');
+
+        if ($parentTabId) {
+            $tab = new Tab($parentTabId);
+            if (Validate::isLoadedObject($tab)) {
+                return $tab->delete();
             }
         }
 
@@ -152,31 +179,59 @@ class Dimrdv extends Module
 
     public function getContent(): string
     {
-        $url = $this->context->link->getAdminLink('AdminDimrdvConfig');
-        Tools::redirectAdmin($url);
-        return '';
+        return "<script>window.location.href = '" . $this->context->link->getAdminLink('AdminDimrdvConfig') . "'</script>";
     }
 
     public function hookDisplayHome(array $params): string
     {
-        $this->context->smarty->assign([
-            'dimrdv_link' => $this->context->link->getModuleLink($this->name, 'dimform'),
-            'module' => $this,
-        ]);
+        if (!isset($this->context->smarty->tpl_vars['hook']->value) || !$this->isCached($this->templateFile, $this->getCacheId('displayHome'))) {
+            $this->context->smarty->assign([
+                'dimrdv_link' => $this->context->link->getModuleLink($this->name, 'dimform'),
+                'module' => $this,
+            ]);
+        }
 
-        return $this->display(__FILE__, 'views/templates/hook/displayHome.tpl');
+        return $this->fetch($this->templateFile, $this->getCacheId('displayHome'));
     }
 
     public function hookActionFrontControllerSetMedia(array $params): void
     {
-        $this->context->controller->addCSS($this->_path . 'views/css/front/dimrdv.css', 'all');
-        $this->context->controller->addJS($this->_path . 'views/js/front/dimrdv.js');
+        $this->context->controller->registerStylesheet(
+            'module-dimrdv-front',
+            'modules/' . $this->name . '/views/css/front/dimrdv.css',
+            [
+                'media' => 'all',
+                'priority' => 50,
+            ]
+        );
+        $this->context->controller->registerJavascript(
+            'module-dimrdv-front',
+            'modules/' . $this->name . '/views/js/front/dimrdv.js',
+            [
+                'position' => 'bottom',
+                'priority' => 50,
+            ]
+        );
     }
 
     public function hookActionAdminControllerSetMedia(array $params): void
     {
-        $this->context->controller->addCSS($this->_path . 'views/css/back/dimrdv.css', 'all');
-        $this->context->controller->addJS($this->_path . 'views/js/back/dimrdv.js');
+        $this->context->controller->registerStylesheet(
+            'module-dimrdv-back',
+            'modules/' . $this->name . '/views/css/back/dimrdv.css',
+            [
+                'media' => 'all',
+                'priority' => 50,
+            ]
+        );
+        $this->context->controller->registerJavascript(
+            'module-dimrdv-back',
+            'modules/' . $this->name . '/views/js/back/dimrdv.js',
+            [
+                'position' => 'bottom',
+                'priority' => 50,
+            ]
+        );
     }
 
     public function getPathUri(): string
