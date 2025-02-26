@@ -11,9 +11,6 @@
 
 namespace Iepiep\Dimrdv\Service;
 
-use Db;
-use Exception;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -64,7 +61,7 @@ class ItineraryService
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($response === false || $httpCode !== 200) {
-            throw new Exception('Erreur lors de la récupération des distances.');
+            throw new \Exception('Erreur lors de la récupération des distances.');
         }
 
         curl_close($ch);
@@ -72,7 +69,7 @@ class ItineraryService
         $data = json_decode($response, true);
 
         if (!isset($data['status']) || $data['status'] !== 'OK') {
-            throw new Exception('Problème avec l\'API Google : ' . ($data['status'] ?? 'Réponse vide'));
+            throw new \Exception('Problème avec l\'API Google : ' . ($data['status'] ?? 'Réponse vide'));
         }
 
         // Extraction de la matrice des distances et des durées
