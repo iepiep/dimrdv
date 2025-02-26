@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file datatype="php" date="2025-10-27T14:30:00+00:00" original="dimrdv" source-language="en" target-language="fr">
+        <body>
+            <trans-unit id="appointment_management_module_with_optimized_itinerary">
+                <source>Appointment management module with optimized itinerary.</source>
+                <target>Module de gestion des rendez-vous avec itinéraire optimisé.</target>
+            </trans-unit>
+            <trans-unit id="dim_rdv">
+                <source>DIM RDV</source>
+                <target>DIM RDV</target>
+            </trans-unit>
+            <trans-unit id="configuration">
+                <source>Configuration</source>
+                <target>Configuration</target>
+            </trans-unit>
+            <trans-unit id="itinerary">
+                <source>Itinerary</source>
+                <target>Itinéraire</target>
+            </trans-unit>
+            <trans-unit id="appointment_request_has_been_successfully_submitted">
+                <source>Your appointment request has been successfully submitted.</source>
+                <target>Votre demande de rendez-vous a bien été enregistrée.</target>
+            </trans-unit>
+            <trans-unit id="invalid_lastname">
+                <source>Invalid lastname.</source>
+                <target>Nom de famille invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_firstname">
+                <source>Invalid firstname.</source>
+                <target>Prénom invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_address">
+                <source>Invalid address.</source>
+                <target>Adresse invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_postal_code">
+                <source>Invalid postal code.</source>
+                <target>Code postal invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_city">
+                <source>Invalid city.</source>
+                <target>Ville invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_phone_number">
+                <source>Invalid phone number.</source>
+                <target>Numéro de téléphone invalide.</target>
+            </trans-unit>
+            <trans-unit id="invalid_email_address">
+                <source>Invalid email address.</source>
+                <target>Adresse email invalide.</target>
+            </trans-unit>
+            <trans-unit id="please_select_a_time_slot_morning">
+                <source>Please select a time slot (morning).</source>
+                <target>Veuillez sélectionner un créneau horaire (matin).</target>
+            </trans-unit>
+            <trans-unit id="please_select_a_time_slot_afternoon">
+                <source>Please select a time slot (afternoon).</source>
+                <target>Veuillez sélectionner un créneau horaire (après-midi).</target>
+            </trans-unit>
+            <trans-unit id="you_must_accept_the_gdpr_terms">
+                <source>You must accept the GDPR terms.</source>
+                <target>Vous devez accepter les conditions RGPD.</target>
+            </trans-unit>
+            <trans-unit id="an_error_occurred_while_saving_your_appointment_request">
+                <source>An error occurred while saving your appointment request.</source>
+                <target>Une erreur s'est produite lors de l'enregistrement de votre demande de rendez-vous.</target>
+            </trans-unit>
+            <trans-unit id="last_name">
+                <source>Last Name</source>
+                <target>Nom de famille</target>
+            </trans-unit>
+            <trans-unit id="first_name">
+                <source>First Name</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="address">
+                <source>Address</source>
+                <target>Adresse</target>
+            </trans-unit>
+            <trans-unit id="postal_code">
+                <source>Postal Code</source>
+                <target>Code Postal</target>
+            </trans-unit>
+            <trans-unit id="city">
+                <source>City</source>
+                <target>Ville</target>
+            </trans-unit>
+            <trans-unit id="phone">
+                <source>Phone</source>
+                <target>Téléphone</target>
+            </trans-unit>
+            <trans-unit id="email">
+                <source>Email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="select_a_time_slot">
+                <source>Select a time slot</source>
+                <target>Sélectionnez un créneau horaire</target>
+            </trans-unit>
+            <trans-unit id="i_agree_to_the_processing_of_my_personal_data_in_accordance_with_the_gdpr_regulations">
+                <source>I agree to the processing of my personal data in accordance with the GDPR regulations.</source>
+                <target>J'accepte le traitement de mes données personnelles conformément à la réglementation RGPD.</target>
+            </trans-unit>
+            <trans-unit id="learn_more">
+                <source>Learn more</source>
+                <target>En savoir plus</target>
+            </trans-unit>
+            <trans-unit id="submit">
+                <source>Submit</source>
+                <target>Envoyer</target>
+            </trans-unit>
+            <trans-unit id="gestion_des_rdv">
+                <source>Gestion des RDV</source>
+                <target>Gestion des RDV</target>
+            </trans-unit>
+            <trans-unit id="id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="nom">
+                <source>Nom</source>
+                <target>Nom</target>
+            </trans-unit>
+            <trans-unit id="pr_nom">
+                <source>Prénom</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="adresse">
+                <source>Adresse</source>
+                <target>Adresse</target>
+            </trans-unit>
+            <trans-unit id="t_l_phone">
+                <source>Téléphone</source>
+                <target>Téléphone</target>
+            </trans-unit>
+            <trans-unit id="s_lection">
+                <source>Sélection</source>
+                <target>Sélection</target>
+            </trans-unit>
+            <trans-unit id="aucun_rdv_trouv">
+                <source>Aucun RDV trouvé</source>
+                <target>Aucun RDV trouvé</target>
+            </trans-unit>
+            <trans-unit id="g_n_rer_itin_raire">
+                <source>Générer itinéraire</source>
+                <target>Générer itinéraire</target>
+            </trans-unit>
+            <trans-unit id="itin_raire_optimis">
+                <source>Itinéraire optimisé</source>
+                <target>Itinéraire optimisé</target>
+            </trans-unit>
+            <trans-unit id="r_sum_de_l_itin_raire">
+                <source>Résumé de l'itinéraire</source>
+                <target>Résumé de l'itinéraire</target>
+            </trans-unit>
+            <trans-unit id="settings_updated">
+              <source>Settings updated.</source>
+              <target>Paramètres mis à jour.</target>
+            </trans-unit>
+            <trans-unit id="google_maps_api_key">
+              <source>Google Maps API Key</source>
+              <target>Clé API Google Maps</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
