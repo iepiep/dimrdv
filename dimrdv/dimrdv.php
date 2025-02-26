@@ -8,12 +8,13 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-//use Db;
-//use Exception;
-//use Language;
-//use PrestaShopLogger;
-//use Tab;
-//use Validate;
+use Configuration;
+use Db;
+use Exception;
+use Language;
+use PrestaShopLogger;
+use Tab;
+use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
