@@ -1,8 +1,8 @@
 <?php
 
-if (!defined('_PS_VERSION_')) { exit; }
-
 namespace Iepiep\Dimrdv\Service;
+
+if (!defined('_PS_VERSION_')) { exit; }
 
 class ItineraryService
 {
