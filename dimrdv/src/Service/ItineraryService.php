@@ -11,6 +11,7 @@
 
 namespace Iepiep\Dimrdv\Service;
 
+use Db;
 use Exception;
 
 if (!defined('_PS_VERSION_')) {
@@ -19,6 +20,9 @@ if (!defined('_PS_VERSION_')) {
 
 class ItineraryService
 {
+    private $durationMatrix = [];
+    private $optimizedRouteIndices = [];
+
     public function calculateItinerary(array $selectedIds, string $googleApiKey): array
     {
         $baseLocation = '25 rue de la Noé Pierre, 53960 Bonchamp-lès-Laval, France';
@@ -37,6 +41,7 @@ class ItineraryService
             $row['full_address'] = $row['address'] . ', ' . $row['postal_code'] . ' ' . $row['city'] . ', France';
             $clients[] = $row;
         }
+
         if (empty($clients)) {
             return [];
         }
@@ -59,25 +64,28 @@ class ItineraryService
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($response === false || $httpCode !== 200) {
-            throw new \Exception('Erreur lors de la récupération des distances.');
+            throw new Exception('Erreur lors de la récupération des distances.');
         }
+
         curl_close($ch);
 
         $data = json_decode($response, true);
 
         if (!isset($data['status']) || $data['status'] !== 'OK') {
-            throw new \Exception('Problème avec l\'API Google : ' . ($data['status'] ?? 'Réponse vide'));
+            throw new Exception('Problème avec l\'API Google : ' . ($data['status'] ?? 'Réponse vide'));
         }
 
         // Extraction de la matrice des distances et des durées
         $distanceMatrix = [];
         $durationMatrix = [];
+
         foreach ($data['rows'] as $i => $row) {
             foreach ($row['elements'] as $j => $element) {
                 $distanceMatrix[$i][$j] = (isset($element['distance']) && $element['status'] === 'OK') ? $element['distance']['value'] : PHP_INT_MAX;
                 $durationMatrix[$i][$j] = (isset($element['duration']) && $element['status'] === 'OK') ? $element['duration']['value'] : PHP_INT_MAX;
             }
         }
+
         // Stocker la matrice des durées dans une propriété pour utilisation ultérieure
         $this->durationMatrix = $durationMatrix;
 
@@ -88,6 +96,7 @@ class ItineraryService
 
         // Construction du tableau ordonné des arrêts en convertissant les indices
         $orderedRoute = [];
+
         foreach ($optimizedRouteIndices as $index) {
             if ($index == 0) {
                 $orderedRoute[] = [
@@ -114,7 +123,7 @@ class ItineraryService
     }
 
     // Algorithme TSP plus proche voisin
-    private function solveTSP($distanceMatrix)
+    private function solveTSP(array $distanceMatrix): array
     {
         $numLocations = count($distanceMatrix);
         $unvisited = range(1, $numLocations - 1); // Exclut le point de départ
@@ -124,32 +133,37 @@ class ItineraryService
         while (!empty($unvisited)) {
             $nearest = null;
             $minDistance = PHP_INT_MAX;
+
             foreach ($unvisited as $i) {
                 if ($distanceMatrix[$current][$i] < $minDistance) {
                     $minDistance = $distanceMatrix[$current][$i];
                     $nearest = $i;
                 }
             }
+
             $route[] = $nearest;
             $current = $nearest;
             $unvisited = array_values(array_diff($unvisited, [$nearest]));
         }
         // Retour à la base
         $route[] = 0;
+
         return $this->optimizeRoute2Opt($route, $distanceMatrix);
     }
 
     // optimisation 2‑opt
-    private function optimizeRoute2Opt($route, $distanceMatrix)
+    private function optimizeRoute2Opt(array $route, array $distanceMatrix): array
     {
         $improved = true;
         $numLocations = count($route);
 
         while ($improved) {
             $improved = false;
+
             for ($i = 1; $i < $numLocations - 2; ++$i) {
                 for ($j = $i + 1; $j < $numLocations - 1; ++$j) {
                     $newRoute = $this->swapTwoOpt($route, $i, $j);
+
                     if ($this->calculateTotalDistance($newRoute, $distanceMatrix) < $this->calculateTotalDistance($route, $distanceMatrix)) {
                         $route = $newRoute;
                         $improved = true;
@@ -157,10 +171,11 @@ class ItineraryService
                 }
             }
         }
+
         return $route;
     }
 
-    private function swapTwoOpt($route, $i, $j)
+    private function swapTwoOpt(array $route, int $i, int $j): array
     {
         return array_merge(
             array_slice($route, 0, $i),
@@ -169,18 +184,18 @@ class ItineraryService
         );
     }
 
-    private function calculateTotalDistance($route, $distanceMatrix)
+    private function calculateTotalDistance(array $route, array $distanceMatrix): int
     {
         $totalDistance = 0;
+
         for ($i = 0; $i < count($route) - 1; ++$i) {
             $totalDistance += $distanceMatrix[$route[$i]][$route[$i + 1]];
         }
+
         return $totalDistance;
     }
 
-    // Planifie les horaires temps réels de déplacement
-    // durée d'intervention de 2 heures 1h
-    private function scheduleItinerary($orderedRoute)
+    private function scheduleItinerary(array $orderedRoute): array
     {
         // Récupérer les indices optimisés calculés précédemment
         $routeIndices = $this->optimizedRouteIndices;
@@ -203,6 +218,7 @@ class ItineraryService
                 $currentTime->modify('+1 hour');
                 $lunchTaken = true;
             }
+
             $appointmentTime = clone $currentTime;
             // Utiliser l'arrêt courant depuis le tableau ordonné
             $stop = $orderedRoute[$i];
@@ -215,6 +231,7 @@ class ItineraryService
             // Ajouter la durée d'intervention de 2 heures (7200 secondes)
             $currentTime->modify('+7200 seconds');
         }
+
         return $schedule;
     }
 }
