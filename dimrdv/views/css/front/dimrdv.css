@@ -1,1 +1,86 @@
+/* dimrdv/views/css/front/dimrdv.css */
 
+/* General styles */
+.dimrdv-home {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd; /* Light border to match PrestaShop */
+  background-color: #f9f9f9; /* Light background */
+}
+
+.dimrdv-home p {
+  font-size: 1.2em;
+  color: #333; /* Darker text for readability */
+  margin-bottom: 10px;
+}
+
+/* Form styles */
+.dimrdv-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+
+.dimrdv-form .form-group {
+  margin-bottom: 15px;
+}
+
+.dimrdv-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555; /* Slightly darker label text */
+}
+
+.dimrdv-form .form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.dimrdv-form .form-control:focus {
+  border-color: #6cace4; /* PrestaShop's primary color */
+  outline: none;
+  box-shadow: 0 0 5px rgba(108, 172, 228, 0.5); /* Subtle glow effect */
+}
+
+.dimrdv-form .btn-primary {
+  background-color: #6cace4; /* PrestaShop's primary color */
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.dimrdv-form .btn-primary:hover {
+  background-color: #549dd9; /* Darker shade on hover */
+}
+
+.dimrdv-form .alert-danger {
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.dimrdv-form .alert-success {
+  background-color: #dff0d8;
+  border: 1px solid #d6e9c6;
+  color: #3c763d;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
