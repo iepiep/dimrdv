@@ -8,7 +8,6 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -93,7 +92,7 @@ class DimrdvDimformModuleFrontController extends ModuleFrontController
             $this->errors[] = $this->module->l('Invalid city.', 'dimform');
         }
 
-        if (empty($phone) || !Validate::isPhoneNumber($phone))
+        if (empty($phone) || !Validate::isPhoneNumber($phone)) {
             $this->errors[] = $this->module->l('Invalid phone number.', 'dimform');
         }
 
