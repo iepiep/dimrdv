@@ -1,1 +1,8 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <hooks>
+    <hook module="dimrdv" hookName="displayHome" />
+    <hook module="dimrdv" hookName="actionFrontControllerSetMedia" />
+    <hook module="dimrdv" hookName="actionAdminControllerSetMedia" />
+  </hooks>
+</module>
