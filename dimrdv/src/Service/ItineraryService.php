@@ -19,9 +19,6 @@ if (!defined('_PS_VERSION_')) {
 
 class ItineraryService
 {
-
-class ItineraryService
-{
     public function calculateItinerary(array $selectedIds, string $googleApiKey): array
     {
         $baseLocation = '25 rue de la Noé Pierre, 53960 Bonchamp-lès-Laval, France';
