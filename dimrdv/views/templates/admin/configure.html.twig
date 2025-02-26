@@ -1,5 +1,15 @@
 {% extends '@PrestaShop/Admin/Layout.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('../modules/dimrdv/views/css/back/dimrdv.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/dimrdv/views/js/back/dimrdv.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="card">
         <div class="card-header">
