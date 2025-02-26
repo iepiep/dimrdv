@@ -12,14 +12,7 @@
         <min>8.2.0</min>
         <max>8.2.99</max>
     </ps_versions_compliancy>
-    <controllers>
-        <admin>
-            <controller>AdminDimrdvGestionRdv</controller>
-            <controller>AdminDimrdvConfig</controller>
-            <controller>AdminDimrdvItinerary</controller>
-        </admin>
-        <front>
-            <controller>dimform</controller>
-        </front>
-    </controllers>
+    <config_file>config/services.xml</config_file>
+    <config_file>config/hook.xml</config_file>
+    <config_file>config/routes.xml</config_file>
 </module>
