@@ -9,8 +9,6 @@
  * with this source code in the file LICENSE.
  */
 
-use PrestaShop\PrestaShop\Core\MailTemplate\Layout\LayoutInterface;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
