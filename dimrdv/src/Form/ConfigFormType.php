@@ -1,8 +1,8 @@
 <?php
 
-if (!defined('_PS_VERSION_')) { exit; }
-
 namespace Iepiep\Dimrdv\Form;
+
+if (!defined('_PS_VERSION_')) { exit; }
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
