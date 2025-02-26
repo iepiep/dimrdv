@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Roberto Minini <r.minini@solution61.fr>
  * @copyright 2025 Roberto Minini
@@ -8,11 +9,19 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
+use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
+use Tab;
+use Language;
+use Configuration;
+use Validate;
+use Db;
+use PrestaShopLogger;
+use Exception;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-
-use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
 
 class Dimrdv extends Module
 {
@@ -74,13 +83,13 @@ class Dimrdv extends Module
         }
 
         // Save the parent tab ID to configuration
-        Configuration::updateValue('DIMRDV_PARENT_TAB_ID', (int)$parentTab->id);
+        Configuration::updateValue('DIMRDV_PARENT_TAB_ID', (int) $parentTab->id);
 
         // Create subtab for configuration
         $configTab = new Tab();
         $configTab->active = 1;
         $configTab->class_name = 'AdminDimrdvConfig';
-        $configTab->id_parent = (int)$parentTab->id; // Parent is the main module tab
+        $configTab->id_parent = (int) $parentTab->id; // Parent is the main module tab
         $configTab->module = $this->name;
         foreach ($languages as $lang) {
             $configTab->name[$lang['id_lang']] = $this->l('Configuration', $lang['locale']); // Translation key
@@ -93,7 +102,7 @@ class Dimrdv extends Module
         $itineraryTab = new Tab();
         $itineraryTab->active = 1;
         $itineraryTab->class_name = 'AdminDimrdvItinerary';
-        $itineraryTab->id_parent = (int)$parentTab->id; // Parent is the main module tab
+        $itineraryTab->id_parent = (int) $parentTab->id; // Parent is the main module tab
         $itineraryTab->module = $this->name;
         foreach ($languages as $lang) {
             $itineraryTab->name[$lang['id_lang']] = $this->l('Itinerary', $lang['locale']); // Translation key
@@ -123,6 +132,7 @@ class Dimrdv extends Module
     private function installSql(): bool
     {
         $sql_file = dirname(__FILE__) . '/sql/installs.sql';
+
         if (!file_exists($sql_file)) {
             return false;
         }
@@ -138,10 +148,8 @@ class Dimrdv extends Module
                         return false;
                     }
                 } catch (Exception $e) {
-                    PrestaShopLogger::addLog("SQL Error: " . $e->getMessage(), 3);
-                    return false;
+                    PrestaShopLogger::addLog('SQL Error: ' . $e->getMessage(), 3);
                 }
-
             }
         }
 
@@ -151,10 +159,12 @@ class Dimrdv extends Module
     private function uninstallSql(): bool
     {
         $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'dim_rdv`';
+
         try {
             return Db::getInstance()->execute($sql);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog("SQL Uninstall Error: " . $e->getMessage(), 3);
+            PrestaShopLogger::addLog('SQL Uninstall Error: ' . $e->getMessage(), 3);
+
             return false;
         }
     }
@@ -177,10 +187,12 @@ class Dimrdv extends Module
     public function resetModuleData(): bool
     {
         $sql = 'TRUNCATE TABLE `' . _DB_PREFIX_ . 'dim_rdv`';
+
         try {
             return Db::getInstance()->execute($sql);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog("SQL Reset Error: " . $e->getMessage(), 3);
+            PrestaShopLogger::addLog('SQL Reset Error: ' . $e->getMessage(), 3);
+
             return false;
         }
     }
