@@ -10,14 +10,13 @@
  * with this source code in the file LICENSE.
  */
 
-use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
-use Tab;
-use Language;
-use Configuration;
-use Validate;
 use Db;
-use PrestaShopLogger;
 use Exception;
+use Language;
+use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
+use PrestaShopLogger;
+use Tab;
+use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
