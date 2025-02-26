@@ -12,7 +12,6 @@
 use Db;
 use Exception;
 use Language;
-use PrestaShop\PrestaShop\Core\Module\Install\ModuleInstaller;
 use PrestaShopLogger;
 use Tab;
 use Validate;
