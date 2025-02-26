@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('_PS_VERSION_')) { exit; }
+
 namespace Iepiep\Dimrdv\Form;
 
 use Symfony\Component\Form\AbstractType;
