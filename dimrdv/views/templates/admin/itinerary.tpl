@@ -9,76 +9,83 @@
  *  to r.minini@solution61.fr so we can send you a copy immediately.
  */
 
-{if isset($errors) && $errors|@count > 0}
-    <div class="alert alert-danger">
-        {foreach from=$errors item=error}
-            <p>{$error|escape:'html':'UTF-8'}</p>
-        {/foreach}
-    </div>
-{else}
-    <h2>{$itinOptimise|default:"Itinéraire optimisé"|escape:'html':'UTF-8'}</h2>
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
 
-    <!-- Carte Google Maps -->
-    <div id="map" style="width: 100%; height: 400px;"></div>
+{% block content %}
+    {% if errors|length > 0 %}
+        <div class="alert alert-danger">
+            {% for error in errors %}
+                <p>{{ error|escape }}</p>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>{{ 'Itinéraire optimisé'|trans({}, 'Modules.Dimrdv.Admin')|default("Itinéraire optimisé")|escape }}</h2>
 
-    <!-- Récapitulatif de l'itinéraire -->
-    <h3>{$resumeItineraire|default:"Résumé de l'itinéraire"|escape:'html':'UTF-8'}</h3>
+        <!-- Carte Google Maps -->
+        <div id="map" style="width: 100%; height: 400px;"></div>
 
-    <ul>
-        {foreach from=$itinerary_schedule|default:[] item=appointment}
-            <li>
-                {$appointment.time|escape:'html':'UTF-8'} - {$appointment.firstname|escape:'html':'UTF-8'} {$appointment.lastname|escape:'html':'UTF-8'} - {$appointment.address|escape:'html':'UTF-8'}
-            </li>
-        {/foreach}
-    </ul>
+        <!-- Récapitulatif de l'itinéraire -->
+        <h3>{{ 'Résumé de l\'itinéraire'|trans({}, 'Modules.Dimrdv.Admin')|default("Résumé de l'itinéraire")|escape }}</h3>
 
-    <!-- Inclusion de l'API Google Maps et affichage de l'itinéraire -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={$google_maps_api_key|escape:'html':'UTF-8'}&callback=initMap" async defer></script>
-    <script>
-        function initMap() {
-            var directionsService = new google.maps.DirectionsService();
-            var directionsRenderer = new google.maps.DirectionsRenderer();
-            var mapOptions = {
-                zoom: 10,
-                center: {ldelim}lat: 48.0, lng: -0.1{rdelim} // Centre approximatif ; à ajuster en fonction des adresses réelles
-            };
-            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            directionsRenderer.setMap(map);
+        <ul>
+            {% for appointment in itinerary_schedule|default([]) %}
+                <li>
+                    {{ appointment.time|escape }} - {{ appointment.firstname|escape }} {{ appointment.lastname|escape }} - {{ appointment.address|escape }}
+                </li>
+            {% endfor %}
+        </ul>
 
-            // Construction du tableau des adresses depuis optimized_route
-            var addresses = [];
-            {foreach from=$optimized_route item=stop}
-                addresses.push("{$stop.full_address|escape:'javascript':'UTF-8'}");
-            {/foreach}
+        <!-- Inclusion de l'API Google Maps et affichage de l'itinéraire -->
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key|escape }}&callback=initMap" async defer></script>
+        <script>
+            function initMap() {
+                var directionsService = new google.maps.DirectionsService();
+                var directionsRenderer = new google.maps.DirectionsRenderer();
+                var mapOptions = {
+                    zoom: 10,
+                    center: {
+                        lat: 48.0,
+                        lng: -0.1
+                    } // Centre approximatif ; à ajuster en fonction des adresses réelles
+                };
+                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                directionsRenderer.setMap(map);
 
-            if (addresses.length < 2)
-                return;
+                // Construction du tableau des adresses depuis optimized_route
+                var addresses = [];
+                {% for stop in optimized_route %}
+                    addresses.push("{{ stop.full_address|escape('js') }}");
+                {% endfor %}
 
-            var origin = addresses[0];
-            var destination = addresses[addresses.length - 1];
-            var waypts = [];
-            // Les arrêts intermédiaires (entre le départ et le retour à la base)
-            for (var i = 1; i < addresses.length - 1; i++) {
-                waypts.push({
-                    location: addresses[i],
-                    stopover: true
+                if (addresses.length < 2)
+                    return;
+
+                var origin = addresses[0];
+                var destination = addresses[addresses.length - 1];
+                var waypts = [];
+                // Les arrêts intermédiaires (entre le départ et le retour à la base)
+                for (var i = 1; i < addresses.length - 1; i++) {
+                    waypts.push({
+                        location: addresses[i],
+                        stopover: true
+                    });
+                }
+
+                var request = {
+                    origin: origin,
+                    destination: destination,
+                    waypoints: waypts,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                directionsService.route(request, function(result, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsRenderer.setDirections(result);
+                    } else {
+                        console.error("{{ 'Erreur lors de la récupération de l\'itinéraire'|trans({}, 'Modules.Dimrdv.Admin')|escape('js') }}: " + status);
+                    }
                 });
             }
-
-            var request = {
-                origin: origin,
-                destination: destination,
-                waypoints: waypts,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-
-            directionsService.route(request, function (result, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    directionsRenderer.setDirections(result);
-                } else {
-                    console.error("{$errorMessage|escape:'javascript':'UTF-8'}: " + status);
-                }
-            });
-        }
-    </script>
-{/if}
+        </script>
+    {% endif %}
+{% endblock %}
