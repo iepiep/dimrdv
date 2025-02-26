@@ -185,11 +185,6 @@ class Dimrdv extends Module
         }
     }
 
-    public function getContent(): string
-    {
-        return "<script>window.location.href = '" . $this->context->link->getAdminLink('AdminDimrdvConfig') . "'</script>";
-    }
-
     public function hookDisplayHome(array $params): string
     {
         if (!isset($this->context->smarty->tpl_vars['hook']->value) || !$this->isCached($this->templateFile, $this->getCacheId('displayHome'))) {
