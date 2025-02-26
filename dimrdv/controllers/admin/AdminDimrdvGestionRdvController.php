@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace  Iepiep\Dimrdv\Controller\Admin;
+namespace Iepiep\Dimrdv\Controller\Admin;
 
 if (!defined('_PS_VERSION_')) {
     exit;
