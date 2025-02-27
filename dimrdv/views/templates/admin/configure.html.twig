@@ -1,0 +1,30 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('modules/dimrdv/views/css/back/dimrdv.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('modules/dimrdv/views/js/back/dimrdv.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ 'Configuration du module'|trans({}, 'Modules.Dimrdv.Admin') }}</h3>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.DIMRDV_GOOGLE_API_KEY) }}
+                    {{ form_widget(form.DIMRDV_GOOGLE_API_KEY, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                 <button type="submit" class="btn btn-primary">
+                    {{ 'Save'|trans({}, 'Admin.Actions') }}
+                </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

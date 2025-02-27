@@ -1,0 +1,14 @@
+admin_dimrdv_config:
+    path: /admin/dimrdv/config
+    defaults:
+        _controller: Iepiep\Dimrdv\src\Controller\Admin\AdminDimrdvConfigController::indexAction
+
+admin_dimrdv_gestionrdv_index:
+    path: /admin/dimrdv/gestionrdv
+    defaults:
+        _controller: Iepiep\Dimrdv\src\Controller\Admin\AdminDimrdvGestionRdvController::indexAction
+
+admin_dimrdv_itinerary_index:
+    path: /admin/dimrdv/itinerary
+    defaults:
+        _controller: Iepiep\Dimrdv\src\Controller\Admin\AdminDimrdvItineraryController::indexAction
